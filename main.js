@@ -1,4 +1,4 @@
-const diff = require('./scripts/diff')
+const diff = require('./dest/diff-min')
 
 let identityOne = {
   name: 'rahmat',
