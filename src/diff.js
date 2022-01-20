@@ -1,4 +1,10 @@
 /**
+ * @license
+ * Copyright (c) 2022 Rahmat Agung Julians. All rights reserved.
+ */
+
+
+/**
  * 
  * @param {Object} obj First object to compare
  * @param {Object} newObj Second object to compare
