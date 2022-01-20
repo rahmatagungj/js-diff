@@ -11,7 +11,7 @@ function diff(obj, newObj, _stack) {
   let diffs = []
   const IS_OBJ_ARRAY = Array.isArray(obj)
 
-  let _compare = key => {
+  const _compare = key => {
     let objKey = obj[key]
     let path = IS_OBJ_ARRAY ? +key : key
 
@@ -27,18 +27,15 @@ function diff(obj, newObj, _stack) {
     let areObjects = typeof objKey === "object" && typeof newObjKey === "object"
 
     if (objKey !== newObjKey && !(areObjects && (isNaN(objKey) ? objKey + "" === newObjKey + "" : +objKey === +newObjKey))) {
-            
         return diffs.push({
             path: [path],
             type: "CHANGE",
             value: newObjKey,
             oldValue: objKey,
         })
-
     }
 
     if (objKey && newObjKey && areObjects && (!_stack.includes(objKey))) {
-        
         const nestedDiffs = diff(objKey, newObjKey, [])
         
         return diffs.push.apply(diffs, nestedDiffs.map(difference => {
