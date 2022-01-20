@@ -11,42 +11,41 @@ function diff(obj, newObj, _stack) {
   let diffs = []
   const IS_OBJ_ARRAY = Array.isArray(obj)
 
-  let _compare = (key) => {
-      let objKey = obj[key]
-      let path = IS_OBJ_ARRAY ? +key : key
+  let _compare = key => {
+    let objKey = obj[key]
+    let path = IS_OBJ_ARRAY ? +key : key
 
-      if (!(key in newObj)) {
-          diffs.push({
-              type: "REMOVE",
-              path: [path],
-              oldValue: obj[key],
-          })
+    if (!(key in newObj)) {
+        return diffs.push({
+            type: "REMOVE",
+            path: [path],
+            oldValue: obj[key],
+        })
+    }
 
-          return "continue"
-      }
+    let newObjKey = newObj[key]
+    let areObjects = typeof objKey === "object" && typeof newObjKey === "object"
 
-      let newObjKey = newObj[key]
-      let areObjects = typeof objKey === "object" && typeof newObjKey === "object"
-
-      if (objKey && newObjKey && areObjects && (!_stack.includes(objKey))) {
-          
-            let nestedDiffs = diff(objKey, newObjKey, [])
+    if (objKey !== newObjKey && !(areObjects && (isNaN(objKey) ? objKey + "" === newObjKey + "" : +objKey === +newObjKey))) {
             
-            diffs.push.apply(diffs, nestedDiffs.map(difference => {
-                difference.path.unshift(path)
-                return difference
-            }))
+        return diffs.push({
+            path: [path],
+            type: "CHANGE",
+            value: newObjKey,
+            oldValue: objKey,
+        })
 
-      } else if (objKey !== newObjKey && !(areObjects && (isNaN(objKey) ? objKey + "" === newObjKey + "" : +objKey === +newObjKey))) {
-          
-          diffs.push({
-              path: [path],
-              type: "CHANGE",
-              value: newObjKey,
-              oldValue: objKey,
-          })
+    }
 
-      }
+    if (objKey && newObjKey && areObjects && (!_stack.includes(objKey))) {
+        
+        const nestedDiffs = diff(objKey, newObjKey, [])
+        
+        return diffs.push.apply(diffs, nestedDiffs.map(difference => {
+            difference.path.unshift(path)
+            return difference
+        }))
+    }
   }
 
   for (let key in obj) {
