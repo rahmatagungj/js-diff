@@ -8,7 +8,7 @@ diff(obj1, obj2)
 ## Example 
 I Make a example, you can see on the main script.
 ```
-node main.js
+npm run start
 ```
 
 ## Local Development Setup
@@ -16,7 +16,12 @@ node main.js
 npm install
 ```
 
+### Run
+```
+npm run dev
+```
+
 ### Build 
 ```
-gulp
+npm run build
 ```
